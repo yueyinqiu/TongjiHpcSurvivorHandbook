@@ -2,3 +2,7 @@ baseURL = "/"
 locale = "zh-cn"
 title = "同济超算生存手册"
 theme = "hugo-book"
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
