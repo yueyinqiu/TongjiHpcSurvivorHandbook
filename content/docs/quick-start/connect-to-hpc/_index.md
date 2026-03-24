@@ -5,7 +5,8 @@ title: "连接超算平台"
 
 # 连接超算平台
 
-当然我们说的是 SSH 。应该没有人会用那个网页吧？也不对，应该是没有人不会用。
+> [!NOTE]
+> 当然我们说的是 SSH 。应该没有人会用那个网页吧？也不对，应该是没有人不会用。
 
 ## 第一步 确认你有 SSH
 
@@ -22,7 +23,7 @@ usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface] [-b bind_address]
 ```
 
 > [!NOTE]
-> 什么叫没有 `ssh` ？我不信。
+> 什么叫没有 `ssh` ？不信。
 
 ## 第二步 在校园网内尝试连接
 
@@ -32,7 +33,7 @@ usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface] [-b bind_address]
 ssh @hpc-user@@@logini.tongji.edu.cn -p 10022
 ```
 
-然后输入密码。我相信你肯定连上了。
+然后输入密码。相信你肯定连上了。
 
 > [!IMPORTANT]
 > 这里 @hpc-user@ 是超算用户名，如果你不是这位老师的学生，请用那个正确的用户名。在页面的最顶端，你可以自定义显示的用户名，这样就不需要手动改命令了。
@@ -125,9 +126,9 @@ echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBwLLOJbq3byqJ8/KREL+93wzIUjpXQ75SUTTX
 ```
 
 > [!IMPORTANT]
-> 这里密钥换成你自己的，不要粘我的。
+> 这里密钥换成你自己的，不要粘这里的。
 
-接下来在你的电脑上，还是那个 SSH 配置文件，改成这样：
+接下来在你的电脑上，还是那个 SSH 配置文件，加一行 `IdentityFile` ：
 
 ```text
 Host @ssh-host@
@@ -143,7 +144,10 @@ Host @ssh-host@
 ssh @ssh-host@
 ```
 
-我猜这次不用输入密码就能进去了。
+这次应该不用输入密码就能进去了。
+
+> [!TIP]
+> 如果直接登不上了，不要着急，你仍然可以使用密码登录（例如，使用 `ssh @hpc-user@@@logini.tongji.edu.cn -p 10022 -o PubkeyAuthentication=no` ）。可以登录上去检查 `authorized_keys` 文件，看看是不是哪里写错了。
 
 ## 第五步 在校园网外连接
 
