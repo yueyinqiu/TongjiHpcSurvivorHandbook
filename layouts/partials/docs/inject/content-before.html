@@ -1,0 +1,104 @@
+<div class="hpc-global-config" style="margin-bottom: 2rem;">
+  <details style="border: 1px solid #007bff; border-radius: 8px; padding: 10px; background: #fdfdfd;">
+    <summary style="cursor: pointer; color: #007bff; font-weight: bold; list-style: none;">
+        ⚙️ 点击配置页面变量
+    </summary>
+    
+    <div id="variable-inputs-b70a93583ced459e8babc7c35dedea0a" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+        </div>
+  </details>
+</div>
+
+<script>
+(function() {
+    const varConfig = {
+        "hpc-user": { label: "超算用户名", default: "u13070" },
+        "ssh-host": { label: "SSH 主机名", default: "tjhpc" },
+        "local-home": { label: "本地家目录", default: "C:/Users/alice" },
+        "fake-home": { label: "超算隔离目录", default: "/share/home/u13070/data/alice" }
+    };
+
+    function initVariableReplacer() {
+        const variables = Object.keys(varConfig);
+
+        const inputContainer = document.getElementById("variable-inputs-b70a93583ced459e8babc7c35dedea0a");
+        variables.forEach(key => {
+            if (varConfig[key]) {
+                const value = localStorage.getItem("variables-" + key) || varConfig[key].default;
+                inputContainer.insertAdjacentHTML("beforeend", `
+                    <div>
+                        <label style="font-size:0.8rem;color:#666;">${varConfig[key].label}</label>
+                        <input type="text" data-hpc-key="${key}" value="${value}" style="width:100%;padding:4px;border:1px solid #ccc;border-radius:4px;display:block;">
+                    </div>`);
+                inputContainer.lastElementChild.querySelector("input").oninput = (e) => 
+                {
+                    localStorage.setItem("variables-" + key, e.target.value);
+                    refreshAll();
+                };
+            }
+        });
+        markNodes(document.body);
+        refreshAll();
+    }
+
+    function markNodes(container) {
+        const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+        let node;
+        while (node = walker.nextNode()) 
+        {
+            if (node.textContent.includes("@")) 
+            {
+                const p = node.parentElement;
+                const skip = ["SCRIPT", "STYLE", "INPUT", "TEXTAREA"].includes(p.tagName) || 
+                             p.closest("#variable-configuration-b70a93583ced459e8babc7c35dedea0a");
+                if (!p.dataset.originalInnerHtml && !skip) 
+                {
+                    p.dataset.originalInnerHtml = p.innerHTML;
+                    p.classList.add("node-with-variable");
+                }
+            }
+        }
+    }
+
+    function refreshAll() 
+    {
+        document.querySelectorAll(".node-with-variable").forEach(node => 
+        {
+            const original = node.dataset.originalInnerHtml;
+
+            let result = "";
+            let cursor = 0;
+            while (true) {
+                let start = original.indexOf("@", cursor);
+                if (start === -1) {
+                    result += original.substring(cursor);
+                    break;
+                }
+                let end = original.indexOf("@", start + 1);
+
+                result += original.substring(cursor, start);
+                if (end === -1) {
+                    end = original.length;
+                }
+
+                const key = original.substring(start + 1, end);
+                if (key === "") 
+                {
+                    result += "@";
+                } 
+                else if (varConfig[key])
+                {
+                    result += localStorage.getItem("variables-" + key) || varConfig[key].default;
+                } 
+                else {
+                    result += `@UNKNOWN_VARIABLE_${key}@`;
+                }
+                cursor = end + 1;
+            }
+            node.innerHTML = result;
+        });
+    }
+
+    window.onload = initVariableReplacer;
+})();
+</script>
