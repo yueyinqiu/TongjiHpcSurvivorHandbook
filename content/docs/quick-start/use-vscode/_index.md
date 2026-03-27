@@ -1,9 +1,9 @@
 ---
 weight: 3000
-title: "配置 Visual Studio Code"
+title: "使用 Visual Studio Code"
 ---
 
-# 配置 Visual Studio Code
+# 使用 Visual Studio Code
 
 > [!NOTE]
 > VSCode 太香辣！目前来看在远程开发方面它的体验还是最好的。
@@ -24,4 +24,4 @@ title: "配置 Visual Studio Code"
 > 如果你发现首次使用 Visual Studio Code 连接时，竟然没有 `Downloading VSCode Server...` 的过程，或者看到一堆眼花缭乱的扩展，请 `echo $HOME` 进行检查，确认你是否在隔离空间中。
 
 > [!NOTE]
-> 啊对吗？那为什么需要这一篇呢？因为后面的一些内容可能假定你正在使用 Visual Studio Code ，例如可能给一些 Visual Studio Code 的配置，让有些功能用起来更顺手。例如可能不再提可以用 `nano` 编辑文本，因为还是用 Visual Studio Code 编辑更香。
+> 啊对吗？那为什么需要这一篇呢？因为后面的一些内容可能会包括“ Visual Studio Code 上这样这样做更好”等等。那这里必须先出现一下，确保完全跟随这个《快速开始》走是没有问题的。
